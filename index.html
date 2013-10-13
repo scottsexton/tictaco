@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+<link rel="stylesheet" type="text/css" href="tic-tac-style.css">
+<script type="text/javascript">
+function chooseLetter(letter) {
+    document.getElementById('pl').value = letter;
+    document.getElementById('links').innerHTML = 'Starting...';
+    callSomePython();
+}
+function callSomePython(position) {
+    if(position) {
+        document.getElementById('box'+position).innerText = document.getElementById('pl').value;
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+                                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                        document.getElementById("gameDiv").innerHTML = xmlhttp.responseText;
+                                    }
+                                 }
+    var playerLetter = document.getElementById('pl').value;
+    var progress = document.getElementById('pg').value;
+    xmlhttp.open("GET", "app.py?pl="+playerLetter+"&pg="+progress+"&sq="+(position-1), true);
+    xmlhttp.send();
+}
+</script>
+</head>
+
+<body>
+  <form>
+    <div id="gameDiv">
+      <div id="links"><a href="javascript:chooseLetter('X')">I'll be X</a><br>
+        <a href="javascript:chooseLetter('O')">I'll be O</a>
+      </div>
+      <input type="hidden" id="pg" value="">
+    </div>
+    <input type="hidden" id="pl" value="">
+  </form>
+</body>
+
+</html>
